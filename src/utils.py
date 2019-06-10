@@ -7,7 +7,8 @@
 import sys
 import numpy as np
 import matplotlib as mpl
-import scipy.misc
+import PIL
+from PIL import Image
 mpl.use('TkAgg')  # or whatever other backend that you want to solve Segmentation fault (core dumped)
 
 
@@ -32,8 +33,9 @@ def _merge(images, size, resize_ratio=1.):
     for idx, image in enumerate(images):
         i = int(idx % size[1])
         j = int(idx / size[1])
-
-        image_resize = scipy.misc.imresize(image, size=(h_, w_), interp='bicubic')
+        
+        #image_resize = scipy.misc.imresize(image, size=(h_, w_), interp='bicubic')
+        image_resize = np.array(Image.fromarray(image).resize(size=(h_, w_)))
         img_canvas[j * h_:j * h_ + h_, i * w_:i * w_ + w_] = image_resize
 
     return img_canvas

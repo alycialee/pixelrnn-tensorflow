@@ -10,8 +10,9 @@ import collections
 import numpy as np
 import tensorflow as tf
 from tensorflow.contrib.rnn.python.ops import core_rnn_cell
-from scipy.misc import imsave
-
+import scipy
+import PIL
+from PIL import Image
 import tensorflow_utils as tf_utils
 import utils as utils
 
@@ -130,8 +131,12 @@ class PixelRNN(object):
             imgs_fake = np.reshape(imgs, (-1, *self.img_size))
 
         h_imgs, w_imgs = int(np.sqrt(imgs_fake.shape[0])), int(np.sqrt(imgs_fake.shape[0]))
-        imsave(os.path.join(save_file, '{}.png'.format(str(iter_time).zfill(3))),
-               utils._merge(imgs_fake, size=[h_imgs, w_imgs], resize_ratio=1.))
+        
+#         scipy.misc.imsave(os.path.join(save_file, '{}.png'.format(str(iter_time).zfill(3))),
+#                utils._merge(imgs_fake, size=[h_imgs, w_imgs], resize_ratio=1.))
+        image_obj = PIL.Image.fromarray(utils._merge(imgs_fake, size=[h_imgs, w_imgs], resize_ratio=1.), 'L')
+        
+        image_obj.save('{}.png'.format(str(iter_time).zfill(3)))
 
     def diagonal_bilstm(self, inputs, name='diagonal_bilstm'):
         with tf.variable_scope(name):
